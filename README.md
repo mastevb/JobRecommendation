@@ -7,3 +7,4 @@ Job+ is a **prototyped** Java-based job search and recommendation web applicatio
 ## GitHub Job PI
 This project uses data fetched from GitHub jobs via the GitHub Job API. GitHub Job API is a web-based API provided by GitHub that allows clients to get retrieve job data from the GitHub Job server. Read more about their awesome API [here](https://jobs.github.com/api).
 ## Recommendation Algorithms
+## Keyword Extraction
