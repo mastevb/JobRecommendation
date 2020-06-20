@@ -46,6 +46,8 @@ Note: S(u, k) stands for the kth most similar users to user u
 
 ## Keyword Extraction
 Since I've implemented a content-based recommendation strategy, an important aspect is retrieving keywords. Unfortunately, the GitHub Job API does not return pre-defined keywords, so we'll need to do it ourselves (not entirely). 
+
 An important concept of keyword extraction is Term Frequency and Inverse Document Frequency. TF-IFG is one of the most common algorithms for keywords extraction that tells you the ordered keywords in a text document. Term Frequency stands for the frequency of a word in a document. However, in order to reduce common words across all sentences such as "a" or "the", we also need to use an Inverse Document Frequency score to filter out meaningless words.
 The score for the keyword = TF(w) * IDF(w) = (number of w in document / number of all words in the document) * log (number of all documents / number of documents having w + 1).
+
 I used the Monkey Learn API for this calculation. The [Monkey Learn API](https://monkeylearn.com/api/v3/) is one of the few keyword extraction APIs that is free and has detailed documentation and libraries. 
