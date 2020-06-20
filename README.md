@@ -10,9 +10,11 @@ This project uses data fetched from GitHub jobs via the GitHub Job API. GitHub J
 One of the most important features of this application is the ability to recommend job postings based on your previously liked postings. In this section, I will discuss several recommendation methods that I've learned while developing this project :)
 
 **Content-based Recommendation**
+
 The key concept behind a content-based recommendation is the idea that "people will like things of similar characteristics". In particular, it means that given different characteristics of an item (category, price, keyword) that a user has liked, recommend items that share the same profile. Content-based recommendations use the similarities within different items for a recommendation, and it is widely used for services under cold start conditions. For example, Apple Music lets you choose the kind of music you like during your first login, which is a content-based method for recommendations.
 
 **Item-based Recommendation**
+
 Item-based recommendation relies on the idea that an item should be recommended to a user who liked the same item as a user that liked that particular item. For example, item C is liked by users who liked item A, so recommend item C to users who like item A.
 Step1: Calculate the similarities between two items based on information about the user groups that liked the items.
 
