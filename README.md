@@ -29,5 +29,19 @@ Note:
 Q(i, k) stands for the kth most similar item to i.
 N(u) stands for the union of items liked by user u.
 R_ui stands for the rating of item j given by user u.
+A slight improvement that can be made to this method is considering the weight between inactive users and active users.
+
+**User-based Recommendation**
+
+A User-based Recommendation is almost the same as the Item-based recommendation, except that it focuses on the user group instead of the items. The idea behind the algorithm is that "user A shares similar preferences as user c, thus items liked by user C but not yet by user A should be recommended to user A.
+Similarly, the calculation can be broken down into two steps, as the following.
+
+![enter image description here](https://github.com/mastevb/JobRecommendation/blob/master/jobs_img/Screen%20Shot%202020-06-20%20at%2012.04.51%20AM.png)
+
+Note: N(u) stands for the union of the items liked by user u.
+
+![enter image description here](https://github.com/mastevb/JobRecommendation/blob/master/jobs_img/Screen%20Shot%202020-06-20%20at%2012.06.54%20AM.png)
+
+Note: S(u, k) stands for the kth most similar users to user u
 
 ## Keyword Extraction
