@@ -27,7 +27,6 @@ public class ItemHistory extends HttpServlet {
 	 */
 	public ItemHistory() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -41,17 +40,15 @@ public class ItemHistory extends HttpServlet {
 			response.setStatus(403);
 			return;
 		}
-
 		String userId = request.getParameter("user_id");
 		// connect to database
 		MySQLConnection connection = new MySQLConnection();
 		Set<Item> items = connection.getFavoriteItems(userId);
 		connection.close();
-
 		JSONArray array = new JSONArray();
 		for (Item item : items) {
 			JSONObject obj = item.toJSONObject();
-			obj.put("favorite", true); // our front end code knows to display a heart
+			obj.put("favorite", true); // our frontend code knows to display a heart
 			array.put(obj);
 		}
 		RpcHelper.writeJsonArray(response, array);
@@ -73,7 +70,6 @@ public class ItemHistory extends HttpServlet {
 		JSONObject input = new JSONObject(IOUtils.toString(request.getReader()));
 		String userId = input.getString("user_id");
 		Item item = RpcHelper.parseFavoriteItem(input.getJSONObject("favorite")); // convert the JSONObject to Item
-
 		connection.setFavoriteItems(userId, item); // set the favorite item through the DB connection
 		connection.close(); // close the connection
 		RpcHelper.writeJsonObject(response, new JSONObject().put("result", "SUCCESS")); // if execute successful, for
@@ -94,10 +90,8 @@ public class ItemHistory extends HttpServlet {
 		JSONObject input = new JSONObject(IOUtils.toString(request.getReader()));
 		String userId = input.getString("user_id");
 		Item item = RpcHelper.parseFavoriteItem(input.getJSONObject("favorite"));
-
 		connection.unsetFavoriteItems(userId, item.getItemId());
 		connection.close();
 		RpcHelper.writeJsonObject(response, new JSONObject().put("result", "SUCCESS"));
 	}
-
 }

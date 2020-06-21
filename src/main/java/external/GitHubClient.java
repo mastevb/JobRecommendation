@@ -24,7 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class GitHubClient {
+
 	private static final String URL_TEMPLATE = "https://jobs.github.com/positions.json?description=%s&lat=%s&long=%s";
+
 	private static final String DEFAULT_KEYWORD = "developer";
 
 	public List<Item> search(double lat, double lon, String keyword) {
@@ -43,7 +45,6 @@ public class GitHubClient {
 		}
 		String url = String.format(URL_TEMPLATE, keyword, lat, lon);
 		CloseableHttpClient httpclient = HttpClients.createDefault();
-
 		// Create a custom response handler
 		ResponseHandler<List<Item>> responseHandler = new ResponseHandler<List<Item>>() {
 			@Override
@@ -67,8 +68,6 @@ public class GitHubClient {
 		// execution
 		try {
 			return httpclient.execute(new HttpGet(url), responseHandler);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,6 +75,7 @@ public class GitHubClient {
 		return new ArrayList<>();
 	}
 
+	// helper function for casting JSONArray to list of items
 	private List<Item> getItemList(JSONArray array) {
 		List<Item> itemList = new ArrayList<>();
 		List<String> descriptionList = new ArrayList<>();

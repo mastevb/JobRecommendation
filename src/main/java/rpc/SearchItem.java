@@ -29,7 +29,6 @@ public class SearchItem extends HttpServlet {
 	 */
 	public SearchItem() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -43,22 +42,20 @@ public class SearchItem extends HttpServlet {
 			response.setStatus(403);
 			return;
 		}
-		
 		String userId = request.getParameter("user_id");
+		// lat and lon and retrieved by frontend
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
-
 		GitHubClient client = new GitHubClient();
-		List<Item> items = client.search(lat, lon, null);
-
+		List<Item> items = client.search(lat, lon, null); // search without keyword
 		MySQLConnection connection = new MySQLConnection();
 		Set<String> favoritedItemIds = connection.getFavoriteItemIds(userId);
 		connection.close();
-		// convert items to JSONArray for return -> clearer JSONArray
+		// convert items to JSONArray for return
 		JSONArray array = new JSONArray();
 		for (Item item : items) {
 			JSONObject obj = item.toJSONObject();
-			obj.put("favorite", favoritedItemIds.contains(item.getItemId())); // front end can decide whether to show favorite (heart) or not
+			obj.put("favorite", favoritedItemIds.contains(item.getItemId())); // frontend can decide whether to show favorite (heart) or not
 			array.put(obj);
 		}
 		// writes the converted JSONArray
@@ -71,8 +68,6 @@ public class SearchItem extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

@@ -12,6 +12,7 @@ import com.monkeylearn.MonkeyLearnException;
 import com.monkeylearn.MonkeyLearnResponse;
 
 public class MonkeyLearnClient {
+
 	private static final String API_KEY = "215b5633e6863bdf0a3f3fe6b8eec80d6752084b";
 	
 	// For testing purposes
@@ -54,12 +55,12 @@ public class MonkeyLearnClient {
 	private static List<List<String>> getKeywords(JSONArray mlResultArray) {
 		List<List<String>> topKeywords = new ArrayList<>();
 		// Iterate the result array and convert it to our format.
-		for (int i = 0; i < mlResultArray.size(); ++i) {
+		for (Object o : mlResultArray) {
 			List<String> keywords = new ArrayList<>();
-			JSONArray keywordsArray = (JSONArray) mlResultArray.get(i); // needs to cast -> returns an object
+			JSONArray keywordsArray = (JSONArray) o; // needs to cast -> returns an object
 //			System.out.println(keywordsArray);
-			for (int j = 0; j < keywordsArray.size(); ++j) {
-				JSONObject keywordObject = (JSONObject) keywordsArray.get(j);
+			for (Object value : keywordsArray) {
+				JSONObject keywordObject = (JSONObject) value;
 				// We just need the keyword, excluding other fields.
 				String keyword = (String) keywordObject.get("keyword");
 				keywords.add(keyword);

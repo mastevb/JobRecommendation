@@ -11,20 +11,28 @@ import java.util.Set;
 import entity.Item;
 import entity.Item.ItemBuilder;
 
+/**
+ * This class handles the connection to the MySQL Database
+ */
 public class MySQLConnection {
-	// the connection to the DB
+	// The connection to the database
 	private Connection conn;
 
+	/**
+	 * Initializes the connection to the MySQL Database
+	 */
 	public MySQLConnection() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection(MySQLDBUtil.URL);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Closes the connection to the database
+	 */
 	public void close() {
 		if (conn != null) {
 			try {
@@ -35,12 +43,14 @@ public class MySQLConnection {
 		}
 	}
 
+	// Sets the relationship between a user and an item
 	public void setFavoriteItems(String userId, Item item) {
 		if (conn == null) {
 			System.err.println("DB connection failed");
 			return;
 		}
-		saveItem(item); // the item might not be in the DB yet
+		// we need to try to save the item first because the item might not be in the database yet
+		saveItem(item);
 		String sql = "INSERT IGNORE INTO history (user_id, item_id) VALUES (?, ?)";
 		try {
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -75,6 +85,7 @@ public class MySQLConnection {
 		}
 		String sql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?, ?)";
 		try {
+			// Save the item
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setString(1, item.getItemId());
 			statement.setString(2, item.getName());
@@ -82,7 +93,7 @@ public class MySQLConnection {
 			statement.setString(4, item.getImageUrl());
 			statement.setString(5, item.getUrl());
 			statement.executeUpdate();
-
+			// Process the keywords related to the item
 			sql = "INSERT IGNORE INTO keywords VALUES (?, ?)";
 			statement = conn.prepareStatement(sql);
 			statement.setString(1, item.getItemId());
@@ -95,15 +106,13 @@ public class MySQLConnection {
 		}
 	}
 
-	// get the favorite ItemIDs in the user's favorite list
+	// Get the itemID based on the userID
 	public Set<String> getFavoriteItemIds(String userId) {
 		if (conn == null) {
 			System.err.println("DB connection failed");
 			return new HashSet<>();
 		}
-
 		Set<String> favoriteItems = new HashSet<>();
-
 		try {
 			String sql = "SELECT item_id FROM history WHERE user_id = ?";
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -116,26 +125,27 @@ public class MySQLConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return favoriteItems;
 	}
 
-	// get the favorite Items in the user's favorite list
+	// Get the item objects based on userID
+	// 1. Get the itemIDs based on userID
+	// 2. Get the item objects based on the retrieved itemIDs
+	//    2.1 Get the keywords related to the item
 	public Set<Item> getFavoriteItems(String userId) {
 		if (conn == null) {
 			System.err.println("DB connection failed");
 			return new HashSet<>();
 		}
 		Set<Item> favoriteItems = new HashSet<>();
-		Set<String> favoriteItemIds = getFavoriteItemIds(userId); // get favorite item ids
-
+		// Get the itemIDs
+		Set<String> favoriteItemIds = getFavoriteItemIds(userId);
 		String sql = "SELECT * FROM items WHERE item_id = ?";
 		try {
 			PreparedStatement statement = conn.prepareStatement(sql);
-			for (String itemId : favoriteItemIds) { // get item based on item ids
+			for (String itemId : favoriteItemIds) {
 				statement.setString(1, itemId);
 				ResultSet rs = statement.executeQuery();
-
 				ItemBuilder builder = new ItemBuilder();
 				if (rs.next()) {
 					builder.setItemId(rs.getString("item_id"));
@@ -143,7 +153,8 @@ public class MySQLConnection {
 					builder.setAddress(rs.getString("address"));
 					builder.setImageUrl(rs.getString("image_url"));
 					builder.setUrl(rs.getString("url"));
-					builder.setKeywords(getKeywords(itemId)); // get keywords by item id
+					// Get the keywords related to the item
+					builder.setKeywords(getKeywords(itemId));
 					favoriteItems.add(builder.build());
 				}
 			}
@@ -153,7 +164,7 @@ public class MySQLConnection {
 		return favoriteItems;
 	}
 
-	// get all of the keywords of an item
+	// Get the keywords related to the itemID
 	public Set<String> getKeywords(String itemId) {
 		if (conn == null) {
 			System.err.println("DB connection failed");
@@ -175,6 +186,7 @@ public class MySQLConnection {
 		return keywords;
 	}
 
+	// Get the full name based on the userID
 	public String getFullname(String userId) {
 		if (conn == null) {
 			System.err.println("DB connection failed");
@@ -195,6 +207,7 @@ public class MySQLConnection {
 		return name;
 	}
 
+	// Return true iff it is a valid login
 	public boolean verifyLogin(String userId, String password) {
 		if (conn == null) {
 			System.err.println("DB connection failed");
@@ -215,12 +228,12 @@ public class MySQLConnection {
 		return false;
 	}
 
+	// Create a new user in the database based on the input
 	public boolean addUser(String userId, String password, String firstname, String lastname) {
 		if (conn == null) {
 			System.err.println("DB connection failed");
 			return false;
 		}
-
 		String sql = "INSERT IGNORE INTO users VALUES (?, ?, ?, ?)";
 		try {
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -228,7 +241,6 @@ public class MySQLConnection {
 			statement.setString(2, password);
 			statement.setString(3, firstname);
 			statement.setString(4, lastname);
-
 			return statement.executeUpdate() == 1; // count of rows updated -> exactly update one
 		} catch (SQLException e) {
 			e.printStackTrace();

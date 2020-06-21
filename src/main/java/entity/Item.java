@@ -5,13 +5,16 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * A representation of the job posting
+ */
 public class Item {
-	private String itemId;
-	private String name;
-	private String address;
-	private Set<String> keywords;
-	private String imageUrl;
-	private String url;
+	private final String itemId;
+	private final String name;
+	private final String address;
+	private final Set<String> keywords;
+	private final String imageUrl;
+	private final String url;
 
 	private Item(ItemBuilder builder) {
 		this.itemId = builder.itemId;

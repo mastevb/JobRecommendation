@@ -23,7 +23,6 @@ public class Login extends HttpServlet {
 	 */
 	public Login() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -57,7 +56,6 @@ public class Login extends HttpServlet {
 		JSONObject input = new JSONObject(IOUtils.toString(request.getReader()));
 		String userId = input.getString("user_id");
 		String password = input.getString("password");
-
 		MySQLConnection connection = new MySQLConnection();
 		JSONObject obj = new JSONObject();
 		if (connection.verifyLogin(userId, password)) {
@@ -71,7 +69,5 @@ public class Login extends HttpServlet {
 		}
 		connection.close();
 		RpcHelper.writeJsonObject(response, obj);
-
 	}
-
 }

@@ -22,7 +22,6 @@ public class Register extends HttpServlet {
 	 */
 	public Register() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -31,7 +30,6 @@ public class Register extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -46,17 +44,14 @@ public class Register extends HttpServlet {
 		String password = input.getString("password");
 		String firstname = input.getString("first_name");
 		String lastname = input.getString("last_name");
-
 		MySQLConnection connection = new MySQLConnection();
 		JSONObject obj = new JSONObject();
 		if (connection.addUser(userId, password, firstname, lastname)) { // if the add is successful
 			obj.put("status", "OK");
 		} else {
-			obj.put("status", "User Already Exists");
+			obj.put("status", "User Already Exists"); // we're not giving out much information about the db
 		}
 		connection.close();
 		RpcHelper.writeJsonObject(response, obj);
-
 	}
-
 }

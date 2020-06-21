@@ -20,7 +20,6 @@ public class Logout extends HttpServlet {
 	 */
 	public Logout() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -29,11 +28,13 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// 1. Invalidate the session
+		// 2. send redirect to homepage
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
 		}
-		//response.sendRedirect("index.html");
+		response.sendRedirect("index.html");
 		JSONObject obj = new JSONObject();
 		obj.put("status", "Logged out");
 		RpcHelper.writeJsonObject(response, obj);
@@ -45,8 +46,6 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

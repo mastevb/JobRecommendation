@@ -12,6 +12,7 @@ import entity.Item;
 import entity.Item.ItemBuilder;
 
 public class RpcHelper {
+
 	// Writes a JSONArray to http response.
 	public static void writeJsonArray(HttpServletResponse response, JSONArray array) throws IOException {
 		response.setContentType("application/json");
@@ -32,7 +33,6 @@ public class RpcHelper {
 		builder.setAddress(favoriteItem.getString("address"));
 		builder.setUrl(favoriteItem.getString("url"));
 		builder.setImageUrl(favoriteItem.getString("image_url"));
-
 		Set<String> keywords = new HashSet<>();
 		JSONArray array = favoriteItem.getJSONArray("keywords");
 		for (int i = 0; i < array.length(); ++i) {
