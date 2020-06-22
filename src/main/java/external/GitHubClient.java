@@ -79,6 +79,7 @@ public class GitHubClient {
 	private List<Item> getItemList(JSONArray array) {
 		List<Item> itemList = new ArrayList<>();
 		List<String> descriptionList = new ArrayList<>();
+		// 1. get the corresponding keywords for each item
 		for (int i = 0; i < array.length(); i++) {
 			// We need to extract keywords from description since GitHub API
 			// doesn't return keywords.
@@ -93,6 +94,7 @@ public class GitHubClient {
 		// MonkeyLearnAPI has limitations on request per minute.
 		List<List<String>> keywords = MonkeyLearnClient
 				.extractKeywords(descriptionList.toArray(new String[descriptionList.size()]));
+		// 2. create items based on the information in the JSONArray, and the keywords we've gathered
 		for (int i = 0; i < array.length(); i++) {
 			// object -> item
 			// item -> add to itemList
@@ -117,5 +119,4 @@ public class GitHubClient {
 	private String getStringFieldOrEmpty(JSONObject obj, String field) {
 		return obj.isNull(field) ? "" : obj.getString(field);
 	}
-
 }
